@@ -45,4 +45,4 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
 	echo "${USER_NAME}:${USER_NAME}" | chpasswd && \
 	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
 
-CMD [ "true" ]
+CMD [ "/bin/bash" ]
