@@ -8,7 +8,7 @@ ARG NPM_LOGLEVEL
 
 ENV USER_NAME node
 ENV NODE_HOME /home/${USER_NAME}
-ENV NODE_PATH ${NODE_HOME}/node_modules
+ENV NODE_PATH ${NODE_HOME}/node_modules:/usr/lib/node_modules
 ENV NPM_PROXY ${NPM_PROXY}
 ENV NPM_LOGLEVEL ${NPM_LOGLEVEL}
 
@@ -26,6 +26,7 @@ RUN apt-get update && \
 				make \
 				libkrb5-dev \
 				libpng-dev \
+				python2.7 \
 				ssh && \
 	apt-get clean  &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

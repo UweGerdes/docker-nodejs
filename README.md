@@ -29,11 +29,11 @@ The following variables are set:
 
 * `USER_NAME=node`
 * `NODE_HOME=/home/node`
-* `NODE_PATH=/home/node/node_modules`
+* `NODE_PATH=/home/node/node_modules:/usr/lib/node_modules`
 * `USER_HOME=/home/node`
 * `NODE_ENV=development`
 
-From the command line:
+Optional parameter from build commandcd :
 
 * `NPM_PROXY`
 * `NPM_LOGLEVEL`
