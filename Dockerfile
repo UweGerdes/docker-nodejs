@@ -17,6 +17,7 @@ ENV NODE_ENV development
 
 # Install Utilities
 RUN apt-get update && \
+	apt-get dist-upgrade -y && \
 	apt-get install -y \
 				apt-utils \
 				build-essential \
@@ -26,7 +27,7 @@ RUN apt-get update && \
 				make \
 				libkrb5-dev \
 				libpng-dev \
-				python2.7 \
+				python \
 				ssh && \
 	apt-get clean  &&\
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
