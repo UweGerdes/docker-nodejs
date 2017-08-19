@@ -1,3 +1,5 @@
+# base image with node 6 and some essentials, user 'node' in /home/node
+
 FROM uwegerdes/baseimage
 MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
 
@@ -22,14 +24,10 @@ RUN apt-get update && \
 				apt-utils \
 				build-essential \
 				gcc \
-				graphviz \
-				imagemagick \
 				make \
 				libkrb5-dev \
-				libpng-dev \
-				python \
-				ssh && \
-	apt-get clean  &&\
+				python && \
+	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install nodejs, use http:// for apt-cacher-ng
@@ -38,7 +36,7 @@ RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
 	apt-get update && \
 	apt-get install -y \
 				nodejs && \
-	apt-get clean  &&\
+	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	mkdir -p ${NODE_HOME} && \
 	groupadd --gid ${GID} ${USER_NAME} && \

@@ -4,7 +4,7 @@
 $ docker build -t uwegerdes/nodejs .
 ```
 
-## Build with npm-proxy-cache
+## Build with npm-proxy-cache on localhost-ip (accessed from docker internal network)
 
 ```bash
 $ docker build -t uwegerdes/nodejs \
