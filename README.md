@@ -13,6 +13,8 @@ $ docker build -t uwegerdes/nodejs \
 	.
 ```
 
+Replace the $(hostname -i) with your proxy address if it's not on localhost - or remove that line.
+
 ## Usage
 
 Use this baseimage in other `Dockerfile`s:
@@ -30,10 +32,9 @@ The following variables are set:
 * `USER_NAME=node`
 * `NODE_HOME=/home/node`
 * `NODE_PATH=/home/node/node_modules:/usr/lib/node_modules`
-* `USER_HOME=/home/node`
 * `NODE_ENV=development`
 
-Optional parameter from build commandcd :
+Optional parameter from build command:
 
 * `NPM_PROXY`
 * `NPM_LOGLEVEL`
