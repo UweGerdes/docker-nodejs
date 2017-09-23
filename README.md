@@ -8,12 +8,14 @@ $ docker build -t uwegerdes/nodejs .
 
 ```bash
 $ docker build -t uwegerdes/nodejs \
-	--build-arg NPM_PROXY="--proxy http://$(hostname -i):3143 --https-proxy http://$(hostname -i):3143 --strict-ssl false" \
-	--build-arg NPM_LOGLEVEL="--loglevel warn" \
+	--build-arg NPM_PROXY="http://$(hostname -i):3143" \
+	--build-arg NPM_LOGLEVEL="warn" \
 	.
 ```
 
 Replace the $(hostname -i) with your proxy address if it's not on localhost - or remove that line.
+
+On loglevel `warn` you have to wait a while if a greater amount of packages have to be loaded, use `info` for much more output.
 
 ## Usage
 
