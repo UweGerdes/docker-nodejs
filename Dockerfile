@@ -19,7 +19,6 @@ ENV NODE_ENV development
 RUN apt-get update && \
 	apt-get dist-upgrade -y && \
 	apt-get install -y \
-				apt-utils \
 				build-essential \
 				gcc \
 				make \
