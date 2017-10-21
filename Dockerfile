@@ -1,4 +1,4 @@
-# base image with node 6 and some essentials, user 'node' in /home/node
+# base image with node 6 and some essentials, user 'node' in /home/node, APP_HOME /home/node/app
 
 FROM uwegerdes/baseimage
 MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
@@ -8,12 +8,16 @@ ARG GID='1000'
 ARG NPM_PROXY
 ARG NPM_LOGLEVEL
 
+ENV NODE_ENV development
 ENV USER_NAME node
 ENV NODE_HOME /home/${USER_NAME}
 ENV NODE_PATH ${NODE_HOME}/node_modules:/usr/lib/node_modules
+ENV HOME ${NODE_HOME}
+ENV APP_HOME ${NODE_HOME}/app
 
-# Set development environment as default
-ENV NODE_ENV development
+#COPY package.json ${NODE_HOME}/
+
+WORKDIR ${NODE_HOME}
 
 # Install Utilities
 RUN apt-get update && \
@@ -33,11 +37,12 @@ RUN apt-get update && \
 				nodejs && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-	mkdir -p ${NODE_HOME} && \
+	mkdir -p ${APP_HOME} && \
 	groupadd --gid ${GID} ${USER_NAME} && \
 	useradd --uid ${UID} --gid ${GID} --home-dir ${NODE_HOME} --shell /bin/bash ${USER_NAME} && \
 	adduser ${USER_NAME} sudo && \
 	echo "${USER_NAME}:${USER_NAME}" | chpasswd && \
+	npm -g config set user ${USER_NAME} && \
 	if [ "${NPM_PROXY}" != '' ]; then \
 		echo "proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
 		echo "https-proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
@@ -48,4 +53,11 @@ RUN apt-get update && \
 	fi && \
 	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
 
+WORKDIR ${APP_HOME}
+
+USER ${USER_NAME}
+
+VOLUME [ "${APP_HOME}" ]
+
 CMD [ "/bin/bash" ]
+
