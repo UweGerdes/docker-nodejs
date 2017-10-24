@@ -8,7 +8,7 @@ $ docker build -t uwegerdes/nodejs .
 
 ```bash
 $ docker build -t uwegerdes/nodejs \
-	--build-arg NPM_PROXY="http://192.168.1.18:3143" \
+	--build-arg NPM_PROXY="http://$(hostname -i):3143" \
 	--build-arg NPM_LOGLEVEL="warn" \
 	.
 ```
