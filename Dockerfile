@@ -57,7 +57,8 @@ WORKDIR ${APP_HOME}
 
 USER ${USER_NAME}
 
-VOLUME [ "${APP_HOME}" ]
+## not setting volume - it will fix ownership of contents to root
+##VOLUME [ "${APP_HOME}" ]
 
 CMD [ "/bin/bash" ]
 
