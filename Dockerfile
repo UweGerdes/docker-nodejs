@@ -1,13 +1,15 @@
-# base image with node 6 and some essentials, user 'node' in /home/node, APP_HOME /home/node/app
+# base image with node 6.x or 8.x and some essentials, user 'node' in /home/node, APP_HOME /home/node/app
 
 FROM uwegerdes/baseimage
 MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
 
 ARG UID='1000'
 ARG GID='1000'
+ARG NODE_VERSION='8.x'
 ARG NPM_PROXY
 ARG NPM_LOGLEVEL
 
+ENV NODE_VERSION ${NODE_VERSION}
 ENV NODE_ENV development
 ENV USER_NAME node
 ENV NODE_HOME /home/${USER_NAME}
@@ -30,7 +32,7 @@ RUN apt-get update && \
 				python && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-	curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+	curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash - && \
 	sed -i -e "s/https:/http:/" /etc/apt/sources.list.d/nodesource.list && \
 	apt-get update && \
 	apt-get install -y \
@@ -51,6 +53,7 @@ RUN apt-get update && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
 		echo "loglevel = ${NPM_LOGLEVEL}" >> ${NODE_HOME}/.npmrc ; \
 	fi && \
+	npm install -g npm-check-updates && \
 	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
 
 WORKDIR ${APP_HOME}
