@@ -7,7 +7,10 @@ $ docker build -t uwegerdes/nodejs .
 ## Build with npm-proxy-cache on localhost-ip (accessed from docker internal network)
 
 ```bash
+$ export NODE_VERSION=8.x
 $ docker build -t uwegerdes/nodejs \
+	-t uwegerdes/nodejs:${NODE_VERSION} \
+	--build-arg NODE_VERSION="${NODE_VERSION}" \
 	--build-arg NPM_PROXY="http://$(hostname -i):3143" \
 	--build-arg NPM_LOGLEVEL="warn" \
 	.
