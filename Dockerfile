@@ -17,7 +17,7 @@ ENV NODE_PATH ${NODE_HOME}/node_modules:/usr/lib/node_modules
 ENV HOME ${NODE_HOME}
 ENV APP_HOME ${NODE_HOME}/app
 
-#COPY package.json ${NODE_HOME}/
+COPY .bashrc ${NODE_HOME}/
 
 WORKDIR ${NODE_HOME}
 

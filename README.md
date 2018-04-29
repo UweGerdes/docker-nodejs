@@ -46,14 +46,11 @@ $ docker start -ai nodejs
 
 Inside the container you can use `npm init` in the app directory.
 
-If you want to install node modules in the container and not your working directory please use the following commands:
+If you want to install node modules in the container please use the following commands:
 
 ```bash
-$ cd ${HOME} && \
-	cp ${APP_HOME}/package.json . && \
-	npm install --save-dev node_module && \
-	cp package.json ${APP_HOME}/ && \
-	cd ${APP_HOME}
+$ npmis module     # for npm install --save
+$ npmisd module    # for npm install --save-dev
 ```
 
 ## Settings
