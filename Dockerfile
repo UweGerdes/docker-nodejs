@@ -37,7 +37,8 @@ RUN apt-get update && \
 	sed -i -e "s/https:/http:/" /etc/apt/sources.list.d/nodesource.list && \
 	apt-get update && \
 	apt-get install -y \
-				nodejs && \
+				nodejs \
+				npm && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	mkdir -p ${APP_HOME} && \
@@ -54,7 +55,6 @@ RUN apt-get update && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
 		echo "loglevel = ${NPM_LOGLEVEL}" >> ${NODE_HOME}/.npmrc ; \
 	fi && \
-	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME} && \
 	npm install -g npm-check-updates && \
 	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
 
