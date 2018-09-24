@@ -1,11 +1,11 @@
-# base image with node 6.x or 8.x and some essentials, user 'node' in /home/node, APP_HOME /home/node/app
+# base image with node 6.x or 8.x and some essentials, user "node" in /home/node, APP_HOME /home/node/app
 
 FROM uwegerdes/baseimage
 MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
 
-ARG UID='1000'
-ARG GID='1000'
-ARG NODE_VERSION='8.x'
+ARG UID="1000"
+ARG GID="1000"
+ARG NODE_VERSION="8.x"
 ARG NPM_PROXY
 ARG NPM_LOGLEVEL
 
@@ -35,8 +35,11 @@ RUN apt-get update && \
 	sed -i -e "s/https:/http:/" /etc/apt/sources.list.d/nodesource.list && \
 	apt-get update && \
 	apt-get install -y \
-				nodejs \
-				npm && \
+				nodejs && \
+	if [ "${NODE_VERSION}" == "6.x" ]; then \
+		apt-get install -y \
+				npm ; \
+	fi && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	mkdir -p ${APP_HOME} && \
@@ -45,12 +48,12 @@ RUN apt-get update && \
 	adduser ${USER_NAME} sudo && \
 	echo "${USER_NAME}:${USER_NAME}" | chpasswd && \
 	npm -g config set user ${USER_NAME} && \
-	if [ "${NPM_PROXY}" != '' ]; then \
+	if [ "${NPM_PROXY}" != "" ]; then \
 		echo "proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
 		echo "https-proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
 		echo "strict-ssl = false" >> ${NODE_HOME}/.npmrc ; \
 	fi && \
-	if [ "${NPM_LOGLEVEL}" != '' ]; then \
+	if [ "${NPM_LOGLEVEL}" != "" ]; then \
 		echo "loglevel = ${NPM_LOGLEVEL}" >> ${NODE_HOME}/.npmrc ; \
 	fi && \
 	npm install -g \
