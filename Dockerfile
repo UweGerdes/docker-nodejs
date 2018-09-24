@@ -36,7 +36,7 @@ RUN apt-get update && \
 	apt-get update && \
 	apt-get install -y \
 				nodejs && \
-	if [ "${NODE_VERSION}" == '6.x' ]; then \
+	if [ "${NODE_VERSION}" = "6.x" ]; then \
 		apt-get install -y \
 				npm ; \
 	fi && \
