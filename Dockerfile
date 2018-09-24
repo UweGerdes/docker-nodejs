@@ -31,13 +31,12 @@ RUN apt-get update && \
 				make \
 				libkrb5-dev \
 				python && \
-	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash - && \
 	sed -i -e "s/https:/http:/" /etc/apt/sources.list.d/nodesource.list && \
 	apt-get update && \
 	apt-get install -y \
-				nodejs && \
+				nodejs \
+				npm && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	mkdir -p ${APP_HOME} && \
@@ -54,8 +53,8 @@ RUN apt-get update && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
 		echo "loglevel = ${NPM_LOGLEVEL}" >> ${NODE_HOME}/.npmrc ; \
 	fi && \
-	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME} && \
-	npm install -g npm-check-updates && \
+	npm install -g \
+				npm-check-updates && \
 	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
 
 WORKDIR ${APP_HOME}
