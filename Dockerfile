@@ -1,11 +1,12 @@
-# base image with node 6.x or 8.x and some essentials, user 'node' in /home/node, APP_HOME /home/node/app
+# base image with node (selectable version) and some essentials, user 'node' in /home/node, APP_HOME /home/node/app
 
-FROM uwegerdes/baseimage
+ARG BASEIMAGE_VERSION=latest
+FROM uwegerdes/baseimage:${BASEIMAGE_VERSION}
 MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
 
 ARG UID='1000'
 ARG GID='1000'
-ARG NODE_VERSION='8.x'
+ARG NODE_VERSION='10.x'
 ARG NPM_PROXY
 ARG NPM_LOGLEVEL
 
