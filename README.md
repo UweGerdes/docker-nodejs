@@ -18,7 +18,11 @@ $ docker build -t uwegerdes/nodejs \
 
 Replace the $(hostname -i) with your proxy address if it's not on localhost - or remove that line.
 
+Replace `$(hostname -i)` with your proxy cache ip if you have a npm proxy on another machine. If you use a hostname please make sure to add `--network=host` to this and all subsequent build and run commands or supply a DNS server ip in your local net to resolve the hostname.
+
 On loglevel `warn` you have to wait a while if a greater amount of packages have to be loaded, use `info` for much more output.
+
+You may add `--build-arg BASEIMAGE_VERSION="latest"` depending on the baseimages you have prepared.
 
 ## Usage
 
