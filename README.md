@@ -6,6 +6,10 @@ $ docker build -t uwegerdes/nodejs .
 
 ## Build with npm-proxy-cache on localhost-ip (accessed from docker internal network)
 
+The build is based on my (docker-baseimage)[https://github.com/UweGerdes/docker-baseimage]
+
+On a Raspberry Pi you should build the baseimage from my (docker-baseimage-arm23v7)[https://github.com/UweGerdes/docker-baseimage-arm32v7].
+
 ```bash
 $ export NODE_VERSION=10.x
 $ docker build -t uwegerdes/nodejs \
