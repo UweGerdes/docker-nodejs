@@ -28,6 +28,17 @@ $ docker build -t uwegerdes/nodejs \
 
 The argument `NPM_PROXY` expects a running (`folha/npm-proxy-cache`)[https://hub.docker.com/r/folha/npm-proxy-cache] on localhost. Replace $(hostname -i) with your proxy address if it's not on localhost - or remove that line if you don't want to use a proxy. If you use a hostname please make sure to add `--network=host` to this and all subsequent build and run commands or supply a DNS server ip in your local net to resolve the hostname. The `NPM_PROXY` will be used for your images build with `FROM uwegerdes/nodejs`.
 
+```bash
+$ sudo mkdir -p /srv/docker/npm-proxy-cache
+$ sudo chown a+w /srv/docker/npm-proxy-cache
+$ docker run -d \
+	--restart=always \
+	-p 3143:8080 \
+	-v /srv/docker/npm-proxy-cache:/cache \
+	--name=npm-proxy-cache \
+	-t folha/npm-proxy-cache
+```
+
 On loglevel `warn` you have less output on npm install operations. Don't think nothing happens if the build of a image seems busy - you know npm install usually has a lot of things to do. You may want to use `info` for much more output.
 
 You may add `--build-arg BASEIMAGE_VERSION="latest"` depending on the `uwegerdes/baseimage` tags you have prepared.
