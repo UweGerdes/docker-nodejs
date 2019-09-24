@@ -57,9 +57,11 @@ RUN apt-get update && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
 		echo "loglevel = ${NPM_LOGLEVEL}" >> ${NODE_HOME}/.npmrc ; \
 	fi && \
-	npm install -g \
+	npm install -g --cache /tmp/root-cache \
+				npm \
 				npm-check-updates && \
-	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
+	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME} && \
+	rm -r /tmp/*
 
 WORKDIR ${APP_HOME}
 
