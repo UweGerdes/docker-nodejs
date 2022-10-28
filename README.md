@@ -15,11 +15,18 @@ The build is based on my (docker-baseimage)[https://github.com/UweGerdes/docker-
 On a Raspberry Pi you should build the baseimage from my (docker-baseimage-arm23v7)[https://github.com/UweGerdes/docker-baseimage-arm32v7].
 
 ```bash
-$ export NODE_VERSION=10.x
+$ export NODE_VERSION=16.x
+# no proxy
+$ docker build -t uwegerdes/nodejs \
+	-t uwegerdes/nodejs:no-proxy \
+	--build-arg NODE_VERSION="${NODE_VERSION}" \
+	--build-arg NPM_LOGLEVEL="warn" \
+	.
+# with proxy
 $ docker build -t uwegerdes/nodejs \
 	-t uwegerdes/nodejs:${NODE_VERSION} \
 	--build-arg NODE_VERSION="${NODE_VERSION}" \
-	--build-arg NPM_PROXY="http://$(hostname -i):3143" \
+	--build-arg NPM_PROXY="http://$(hostname):3143" \
 	--build-arg NPM_LOGLEVEL="warn" \
 	.
 ```

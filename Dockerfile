@@ -6,7 +6,7 @@ MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
 
 ARG UID='1000'
 ARG GID='1000'
-ARG NODE_VERSION='10.x'
+ARG NODE_VERSION='16.x'
 ARG NPM_PROXY
 ARG NPM_LOGLEVEL
 
@@ -18,8 +18,6 @@ ENV NODE_PATH ${NODE_HOME}/node_modules:/usr/lib/node_modules
 ENV HOME ${NODE_HOME}
 ENV APP_HOME ${NODE_HOME}/app
 
-COPY .bashrc ${NODE_HOME}/
-
 WORKDIR ${NODE_HOME}
 
 # Install Utilities
@@ -28,19 +26,16 @@ RUN apt-get update && \
 	apt-get install -y \
 				build-essential \
 				gcc \
+				g++ \
 				gnupg \
 				make \
 				libkrb5-dev \
-				python && \
+				python3 && \
 	curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash - && \
 	sed -i -e "s/https:/http:/" /etc/apt/sources.list.d/nodesource.list && \
 	apt-get update && \
 	apt-get install -y \
 				nodejs && \
-	if [ "${NODE_VERSION}" = "6.x" ]; then \
-		apt-get install -y \
-				npm ; \
-	fi && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	mkdir -p ${APP_HOME} && \
@@ -49,26 +44,29 @@ RUN apt-get update && \
 	adduser ${USER_NAME} sudo && \
 	echo "${USER_NAME}:${USER_NAME}" | chpasswd && \
 	npm -g config set user ${USER_NAME} && \
-	if [ "${NPM_PROXY}" != '' ]; then \
-		echo "proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
-		echo "https-proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
-		echo "strict-ssl = false" >> ${NODE_HOME}/.npmrc ; \
-	fi && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
 		echo "loglevel = ${NPM_LOGLEVEL}" >> ${NODE_HOME}/.npmrc ; \
 	fi && \
 	npm install -g --cache /tmp/root-cache \
 				npm \
-				npm-check-updates && \
-	chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME} && \
-	rm -r /tmp/*
+				npm-check-updates
+
+COPY .bashrc ${NODE_HOME}/
+
+RUN chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
+
+RUN if [ "${NPM_PROXY}" != '' ]; then \
+		echo "proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
+		echo "https-proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
+		echo "strict-ssl = false" >> ${NODE_HOME}/.npmrc ; \
+	fi
 
 WORKDIR ${APP_HOME}
 
 USER ${USER_NAME}
 
 ## not setting volume - it will fix ownership of contents to root
-##VOLUME [ "${APP_HOME}" ]
+VOLUME [ "${APP_HOME}" ]
 
 CMD [ "/bin/bash" ]
 
