@@ -6,8 +6,7 @@ MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
 
 ARG UID='1000'
 ARG GID='1000'
-ARG NODE_VERSION='16.x'
-ARG NPM_PROXY
+ARG NODE_VERSION='18.x'
 ARG NPM_LOGLEVEL
 
 ENV NODE_VERSION ${NODE_VERSION}
@@ -45,7 +44,7 @@ RUN apt-get update && \
 	echo "${USER_NAME}:${USER_NAME}" | chpasswd && \
 	npm -g config set user ${USER_NAME} && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
-		echo "loglevel = ${NPM_LOGLEVEL}" >> ${NODE_HOME}/.npmrc ; \
+		npm -g config set loglevel ${NPM_LOGLEVEL} ; \
 	fi && \
 	npm install -g --cache /tmp/root-cache \
 				npm \
@@ -54,12 +53,6 @@ RUN apt-get update && \
 COPY .bashrc ${NODE_HOME}/
 
 RUN chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
-
-RUN if [ "${NPM_PROXY}" != '' ]; then \
-		echo "proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
-		echo "https-proxy = ${NPM_PROXY}" >> ${NODE_HOME}/.npmrc ; \
-		echo "strict-ssl = false" >> ${NODE_HOME}/.npmrc ; \
-	fi
 
 WORKDIR ${APP_HOME}
 
