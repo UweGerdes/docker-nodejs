@@ -42,7 +42,6 @@ RUN apt-get update && \
 	useradd --uid ${UID} --gid ${GID} --home-dir ${NODE_HOME} --shell /bin/bash ${USER_NAME} && \
 	adduser ${USER_NAME} sudo && \
 	echo "${USER_NAME}:${USER_NAME}" | chpasswd && \
-	npm -g config set user ${USER_NAME} && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
 		npm -g config set loglevel ${NPM_LOGLEVEL} ; \
 	fi && \
