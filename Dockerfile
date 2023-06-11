@@ -36,7 +36,6 @@ RUN apt-get update && \
 	apt-get install -y \
 				nodejs && \
 	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 	mkdir -p ${APP_HOME} && \
 	groupadd --gid ${GID} ${USER_NAME} && \
 	useradd --uid ${UID} --gid ${GID} --home-dir ${NODE_HOME} --shell /bin/bash ${USER_NAME} && \
@@ -47,7 +46,8 @@ RUN apt-get update && \
 	fi && \
 	npm install -g --cache /tmp/root-cache \
 				npm \
-				npm-check-updates
+				npm-check-updates && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY .bashrc ${NODE_HOME}/
 
