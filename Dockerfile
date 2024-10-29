@@ -2,20 +2,21 @@
 
 ARG BASEIMAGE_VERSION=latest
 FROM uwegerdes/baseimage:${BASEIMAGE_VERSION}
-MAINTAINER Uwe Gerdes <entwicklung@uwegerdes.de>
+
+LABEL org.opencontainers.image.authors="entwicklung@uwegerdes.de"
 
 ARG UID='1000'
 ARG GID='1000'
-ARG NODE_VERSION='18.x'
+ARG NODE_VERSION='22.x'
 ARG NPM_LOGLEVEL
 
-ENV NODE_VERSION ${NODE_VERSION}
-ENV NODE_ENV development
-ENV USER_NAME node
-ENV NODE_HOME /home/${USER_NAME}
-ENV NODE_PATH ${NODE_HOME}/node_modules:/usr/lib/node_modules
-ENV HOME ${NODE_HOME}
-ENV APP_HOME ${NODE_HOME}/app
+ENV NODE_VERSION=${NODE_VERSION}
+ENV NODE_ENV=development
+ENV USER_NAME=node
+ENV NODE_HOME=/home/${USER_NAME}
+ENV NODE_PATH=${NODE_HOME}/node_modules:/usr/lib/node_modules
+ENV HOME=${NODE_HOME}
+ENV APP_HOME=${NODE_HOME}/app
 
 WORKDIR ${NODE_HOME}
 
@@ -35,11 +36,18 @@ RUN apt-get update && \
 	apt-get update && \
 	apt-get install -y \
 				nodejs && \
-	apt-get clean && \
-	mkdir -p ${APP_HOME} && \
-	groupadd --gid ${GID} ${USER_NAME} && \
-	useradd --uid ${UID} --gid ${GID} --home-dir ${NODE_HOME} --shell /bin/bash ${USER_NAME} && \
-	adduser ${USER_NAME} sudo && \
+	apt-get clean
+
+RUN if [ -d /home/ubuntu ]; then \
+		usermod -l ${USER_NAME} ubuntu && \
+		groupmod -n ${USER_NAME} ubuntu && \
+		usermod -c "${USER_NAME}" ${USER_NAME} ; \
+	else \
+		mkdir -p ${APP_HOME} && \
+		groupadd --gid ${GID} ${USER_NAME} && \
+		useradd --uid ${UID} --gid ${GID} --home-dir ${NODE_HOME} --shell /bin/bash ${USER_NAME} && \
+		adduser ${USER_NAME} sudo ; \
+	fi && \
 	echo "${USER_NAME}:${USER_NAME}" | chpasswd && \
 	if [ "${NPM_LOGLEVEL}" != '' ]; then \
 		npm -g config set loglevel ${NPM_LOGLEVEL} ; \
@@ -49,7 +57,7 @@ RUN apt-get update && \
 				npm-check-updates && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY .bashrc ${NODE_HOME}/
+COPY .bash_aliases ${NODE_HOME}/
 
 RUN chown -R ${USER_NAME}:${USER_NAME} ${NODE_HOME}
 

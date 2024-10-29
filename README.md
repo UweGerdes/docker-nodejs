@@ -13,12 +13,14 @@ $ docker build -t uwegerdes/nodejs .
 The build is based on my (docker-baseimage)[https://github.com/UweGerdes/docker-baseimage]
 
 ```bash
-$ export NODE_VERSION=18.x
+$ export NODE_VERSION=22.x
 $ docker build -t uwegerdes/nodejs \
 	-t uwegerdes/nodejs:${NODE_VERSION} \
 	--build-arg NODE_VERSION="${NODE_VERSION}" \
-	--build-arg NPM_LOGLEVEL="info" \
+	--build-arg NPM_LOGLEVEL="warn" \
+	--no-cache \
 	.
+```
 
 `NODE_VERSION` is found on (github.com/nodesource)[https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions]. The above command builds image tags `latest` and `10.x`.
 
@@ -62,6 +64,18 @@ $ npmisd module    # for npm install --save-dev
 ```
 
 This installs the packages in the container directory `/home/node/node_modules/` and not in `home/node/app/` - your project directory will not have `node_modules` which makes backups and other things simpler.
+
+## Check for updates
+
+The package `npm-check-updates` is installed globally, so you can check your `package.json` for updates with:
+
+```bash
+$ cp package.json ../
+$ cd ..
+$ ncu
+$ ncu -u
+$ cp package.json ./app/
+```
 
 ## Settings
 
