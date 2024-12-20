@@ -8,11 +8,13 @@ LABEL org.opencontainers.image.authors="entwicklung@uwegerdes.de"
 ARG UID='1000'
 ARG GID='1000'
 ARG NODE_VERSION='22.x'
-ARG NPM_LOGLEVEL
+ARG NPM_LOGLEVEL='warn'
+ENV USER_NAME='node'
+ENV NODE_HOME='/home/node'
 
 ENV NODE_VERSION=${NODE_VERSION}
 ENV NODE_ENV=development
-ENV USER_NAME=node
+ENV USER_NAME=${USER_NAME}
 ENV NODE_HOME=/home/${USER_NAME}
 ENV NODE_PATH=${NODE_HOME}/node_modules:/usr/lib/node_modules
 ENV HOME=${NODE_HOME}
@@ -38,12 +40,13 @@ RUN apt-get update && \
 				nodejs && \
 	apt-get clean
 
-RUN if [ -d /home/ubuntu ]; then \
+RUN mkdir -p ${APP_HOME} && \
+	if [ -d /home/ubuntu ]; then \
 		usermod -l ${USER_NAME} ubuntu && \
 		groupmod -n ${USER_NAME} ubuntu && \
 		usermod -c "${USER_NAME}" ${USER_NAME} ; \
+		cp /home/ubuntu/.??* ${NODE_HOME} ; \
 	else \
-		mkdir -p ${APP_HOME} && \
 		groupadd --gid ${GID} ${USER_NAME} && \
 		useradd --uid ${UID} --gid ${GID} --home-dir ${NODE_HOME} --shell /bin/bash ${USER_NAME} && \
 		adduser ${USER_NAME} sudo ; \
