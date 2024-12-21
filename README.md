@@ -22,7 +22,7 @@ $ docker build -t uwegerdes/nodejs \
 	.
 ```
 
-`NODE_VERSION` is found on (github.com/nodesource)[https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions]. The above command builds image tags `latest` and `10.x`.
+`NODE_VERSION` is found on (github.com/nodesource)[https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions]. The above command builds image tags `latest` and `22.x`.
 
 On loglevel `warn` you have less output on npm install operations. Don't think nothing happens if the build of a image seems busy - you know npm install usually has a lot of things to do. You may want to use `info` for much more output.
 
